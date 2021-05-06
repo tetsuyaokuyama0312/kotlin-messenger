@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -62,6 +63,9 @@ class LatestMessagesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_latest_messages)
 
+        // ログイン中かチェック
+        verifyUserIsLoggedIn()
+
         recyclerview_latest_messages.adapter = latestMessagesAdapter
         recyclerview_latest_messages.isFocusable = false
         recyclerview_latest_messages.addItemDecoration(
@@ -70,6 +74,19 @@ class LatestMessagesActivity : AppCompatActivity() {
                 DividerItemDecoration.VERTICAL
             )
         )
+
+        swiperefresh_latest_messages.setColorSchemeColors(
+            ContextCompat.getColor(
+                this,
+                R.color.colorAccent
+            )
+        )
+
+        // ログイン中のユーザー情報を取得
+        fetchCurrentUser()
+
+        // 最新メッセージを取得
+        listenForLatestMessages()
 
         latestMessagesAdapter.setOnItemClickListener { item, view ->
             val row = item as LatestMessageRow
@@ -89,14 +106,11 @@ class LatestMessagesActivity : AppCompatActivity() {
             )
         }
 
-        // ログイン中かチェック
-        verifyUserIsLoggedIn()
-
-        // ログイン中のユーザー情報を取得
-        fetchCurrentUser()
-
-        // 最新メッセージを取得
-        listenForLatestMessages()
+        swiperefresh_latest_messages.setOnRefreshListener {
+            verifyUserIsLoggedIn()
+            fetchCurrentUser()
+            listenForLatestMessages()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -143,8 +157,23 @@ class LatestMessagesActivity : AppCompatActivity() {
      * 最新メッセージを取得する。
      */
     private fun listenForLatestMessages() {
+        swiperefresh_latest_messages.isRefreshing = true
         val fromId = FirebaseAuthAccessor.getUid() ?: return
         val ref = FirebaseDatabaseAccessor.getLatestMessagesRef(fromId)
+
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(databaseError: DatabaseError) {
+                logDebug("Database error: ${databaseError.message}")
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                logDebug("has children: ${dataSnapshot.hasChildren()}")
+                if (!dataSnapshot.hasChildren()) {
+                    // メッセージのやり取りがない場合はここでリフレッシュ動作を終了させる
+                    swiperefresh_latest_messages.isRefreshing = false
+                }
+            }
+        })
 
         ref.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -181,6 +210,7 @@ class LatestMessagesActivity : AppCompatActivity() {
                 val (date, time) = getFormattedDateTime(this, it.timestamp)
                 latestMessagesAdapter.add(LatestMessageRow(this, it, date, time))
             }
+        swiperefresh_latest_messages.isRefreshing = false
     }
 
     /**

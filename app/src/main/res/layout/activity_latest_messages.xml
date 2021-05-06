@@ -6,16 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".activity.message.LatestMessagesActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_latest_messages"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#f5ecf4"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh_latest_messages"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_latest_messages"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#f5ecf4"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/new_message_fab"
@@ -26,7 +33,7 @@
         android:src="@drawable/ic_message"
         app:backgroundTint="#d70035"
         app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerview_latest_messages"
+        app:layout_constraintBottom_toBottomOf="@+id/swiperefresh_latest_messages"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

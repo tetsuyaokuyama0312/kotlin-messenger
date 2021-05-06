@@ -47,7 +47,7 @@ class NewMessageActivity : AppCompatActivity() {
         swiperefresh_newmessage.setColorSchemeColors(
             ContextCompat.getColor(
                 this,
-                R.color.colorPrimary
+                R.color.colorAccent
             )
         )
 
