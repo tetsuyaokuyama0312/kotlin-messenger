@@ -35,6 +35,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_textview_from_row" />
 
+    <ProgressBar
+        android:id="@+id/circular_progressbar_chat_from_row"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/image_view_chat_from_row"
+        app:layout_constraintEnd_toEndOf="@+id/image_view_chat_from_row"
+        app:layout_constraintStart_toStartOf="@+id/image_view_chat_from_row"
+        app:layout_constraintTop_toTopOf="@+id/image_view_chat_from_row" />
+
     <com.github.library.bubbleview.BubbleTextView
         android:id="@+id/message_textview_from_row"
         android:layout_width="wrap_content"

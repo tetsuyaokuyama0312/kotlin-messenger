@@ -1,16 +1,13 @@
 package com.to.kotlinmessenger.view
 
 import android.content.Context
-import com.to.kotlinmessenger.R
-import com.to.kotlinmessenger.model.ChatMessage
-import com.to.kotlinmessenger.model.User
-import com.to.kotlinmessenger.util.FirebaseAuthAccessor
-import com.to.kotlinmessenger.util.FirebaseDatabaseAccessor
-import com.to.kotlinmessenger.util.getDisplayUserName
-import com.to.kotlinmessenger.util.loadProfileImageIntoView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.to.kotlinmessenger.R
+import com.to.kotlinmessenger.model.ChatMessage
+import com.to.kotlinmessenger.model.User
+import com.to.kotlinmessenger.util.*
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.latest_message_row.view.*
@@ -46,7 +43,12 @@ class LatestMessageRow(
 
                 // プロフィール画像
                 val targetImageView = viewHolder.itemView.imageview_latest_message
-                loadProfileImageIntoView(user, targetImageView)
+                val progressBar = viewHolder.itemView.circular_progressbar_latest_message_menu
+                loadProfileImageIntoView(
+                    user,
+                    targetImageView,
+                    ProgressBarImageLoadListener(progressBar)
+                )
                 // ユーザー名
                 viewHolder.itemView.username_textview_latest_message.text =
                     getDisplayUserName(context, user)

@@ -39,19 +39,6 @@
                 app:layout_constraintStart_toStartOf="@+id/selectphoto_button_change_user_settings"
                 app:layout_constraintTop_toTopOf="@+id/selectphoto_button_change_user_settings" />
 
-            <ProgressBar
-                android:id="@+id/progressbar_user_settings_change"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:translationZ="1dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/selectphoto_button_change_user_settings" />
-
             <TextView
                 android:id="@+id/textview_username_user_settings_change"
                 android:layout_width="wrap_content"

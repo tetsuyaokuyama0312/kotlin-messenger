@@ -4,6 +4,7 @@ import androidx.core.view.isVisible
 import com.to.kotlinmessenger.R
 import com.to.kotlinmessenger.model.ChatMessage
 import com.to.kotlinmessenger.model.User
+import com.to.kotlinmessenger.util.ProgressBarImageLoadListener
 import com.to.kotlinmessenger.util.loadProfileImageIntoView
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -28,7 +29,9 @@ class ChatFromItem(
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         // プロフィール画像
-        loadProfileImageIntoView(user, viewHolder.itemView.image_view_chat_from_row)
+        val targetImageView = viewHolder.itemView.image_view_chat_from_row
+        val progressBar = viewHolder.itemView.circular_progressbar_chat_from_row
+        loadProfileImageIntoView(user, targetImageView, ProgressBarImageLoadListener(progressBar))
         // 日付
         if (date != null) {
             viewHolder.itemView.date_textview_from_row.text = date
@@ -65,7 +68,9 @@ class ChatToItem(
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         // プロフィール画像
-        loadProfileImageIntoView(user, viewHolder.itemView.image_view_chat_to_row)
+        val targetImageView = viewHolder.itemView.image_view_chat_to_row
+        val progressBar = viewHolder.itemView.circular_progressbar_chat_to_row
+        loadProfileImageIntoView(user, targetImageView, ProgressBarImageLoadListener(progressBar))
         // 日付
         if (date != null) {
             viewHolder.itemView.date_textview_to_row.text = date

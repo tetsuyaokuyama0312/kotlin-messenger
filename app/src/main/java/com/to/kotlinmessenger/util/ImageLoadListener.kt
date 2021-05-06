@@ -14,7 +14,7 @@ interface ImageLoadListener : EventListener {
      * @param imageUri 画像ファイルのURI
      * @param targetImageView ロードした画像ファイルを表示するView
      */
-    fun onStart(imageUri: Any, targetImageView: ImageView)
+    fun onStart(imageUri: Any, targetImageView: ImageView) {}
 
     /**
      * 画像ファイルのロード終了時に呼び出される。
@@ -22,7 +22,7 @@ interface ImageLoadListener : EventListener {
      * @param imageUri 画像ファイルのURI
      * @param targetImageView ロードした画像ファイルを表示するView
      */
-    fun onFinish(imageUri: Any, targetImageView: ImageView)
+    fun onFinish(imageUri: Any, targetImageView: ImageView) {}
 
     /**
      * 画像ファイルのロード成功時に呼び出される。
@@ -30,7 +30,7 @@ interface ImageLoadListener : EventListener {
      * @param imageUri 画像ファイルのURI
      * @param targetImageView ロードした画像ファイルを表示するView
      */
-    fun onSuccess(imageUri: Any, targetImageView: ImageView)
+    fun onSuccess(imageUri: Any, targetImageView: ImageView) {}
 
     /**
      * 画像ファイルのロード失敗時に呼び出される。
@@ -39,7 +39,7 @@ interface ImageLoadListener : EventListener {
      * @param imageUri 画像ファイルのURI
      * @param targetImageView ロードした画像ファイルを表示するView
      */
-    fun onFailure(ex: Exception?, imageUri: Any, targetImageView: ImageView)
+    fun onFailure(ex: Exception?, imageUri: Any, targetImageView: ImageView) {}
 
     companion object {
         /** `ImageLoadListener`のNOP */

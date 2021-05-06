@@ -5,10 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.to.kotlinmessenger.R
 import com.to.kotlinmessenger.activity.account.RegisterActivity
 import com.to.kotlinmessenger.activity.message.dialog.UserSettingsChangeListener
@@ -19,10 +22,6 @@ import com.to.kotlinmessenger.model.ChatMessage
 import com.to.kotlinmessenger.model.User
 import com.to.kotlinmessenger.util.*
 import com.to.kotlinmessenger.view.LatestMessageRow
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import de.hdodenhof.circleimageview.CircleImageView
@@ -210,7 +209,7 @@ class LatestMessagesActivity : AppCompatActivity() {
         loadProfileImageIntoView(
             currentUser,
             profileImageView,
-            createImageLoadListener(progressBarItem)
+            ProgressBarImageLoadListener(progressBarItem = progressBarItem)
         )
 
         profileImageView.setOnClickListener {
@@ -222,37 +221,6 @@ class LatestMessagesActivity : AppCompatActivity() {
                     putParcelable(LISTENER_KEY, createUserSettingsChangeListener(progressBarItem))
                 }
             }.show(supportFragmentManager, dialog::class.simpleName)
-        }
-    }
-
-    /**
-     * `ImageLoadListener`を構築し、プロフィール画像のロード時に呼び出されるコールバックを設定する。
-     *
-     * @param progressBarItem オプションメニュー上のプログレスバー
-     * @return プロフィール画像のロード時に使用される`ImageLoadListener`
-     */
-    private fun createImageLoadListener(progressBarItem: MenuItem): ImageLoadListener {
-        return object : ImageLoadListener {
-            override fun onStart(imageUri: Any, targetImageView: ImageView) {
-                progressBarItem.isVisible = true
-            }
-
-            override fun onFinish(imageUri: Any, targetImageView: ImageView) {
-                progressBarItem.isVisible = false
-            }
-
-            override fun onSuccess(imageUri: Any, targetImageView: ImageView) {
-                logDebug("Successfully loaded profile image: uri=$imageUri")
-            }
-
-            override fun onFailure(ex: Exception?, imageUri: Any, targetImageView: ImageView) {
-                logDebug("Failed to load profile image: uri=$imageUri, ex=$ex")
-                Toast.makeText(
-                    this@LatestMessagesActivity,
-                    getString(R.string.load_image_fail),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
         }
     }
 
@@ -271,9 +239,9 @@ class LatestMessagesActivity : AppCompatActivity() {
             override fun onFinish(oldUser: User, newUser: User?) {
                 // ここでは何もしない
                 // ユーザー設定変更後に、fetchCurrentUserにて設定したValueEventListener#onChangeによりプロフィール画像のロードが行われるので、
-                // プログレスバーを非表示にするのはメニュー上でプロフィール画像のロードが完了したタイミングに委ねる(ImageLoadListener#onFinish)
+                // プログレスバーを非表示にするのはメニュー上でプロフィール画像のロードが完了したタイミングに委ねる(ProgressBarImageLoadListener#onFinish)
                 // ここでプログレスバーを非表示にすると、プロフィール画像のロードが完了する前にプログレスバーが非表示になってしまう
-                // なおプロフィール画像は変更せずにユーザー名のみ変更した場合でも、ImageLoadListener#onFinishは呼ばれる
+                // なおプロフィール画像は変更せずにユーザー名のみ変更した場合でも、ProgressBarImageLoadListener#onFinishは呼ばれる
             }
 
             override fun onSuccess(oldUser: User, newUser: User) {
