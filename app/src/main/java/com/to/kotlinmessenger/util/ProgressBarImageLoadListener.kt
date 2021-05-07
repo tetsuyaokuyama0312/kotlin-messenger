@@ -14,9 +14,11 @@ import androidx.core.view.isVisible
  * @property progressBarItem 表示対象のプログレスバーのメニューアイテム(nullの場合は何もしない)
  */
 class ProgressBarImageLoadListener(
-    private val progressBar: ProgressBar? = null,
-    private val progressBarItem: MenuItem? = null
+    private val progressBar: ProgressBar?,
+    private val progressBarItem: MenuItem?
 ) : ImageLoadListener {
+    constructor(progressBar: ProgressBar) : this(progressBar, null)
+    constructor(progressBarItem: MenuItem) : this(null, progressBarItem)
 
     override fun onStart(imageUri: Any, targetImageView: ImageView) {
         progressBar?.isVisible = true

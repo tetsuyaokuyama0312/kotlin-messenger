@@ -239,7 +239,7 @@ class LatestMessagesActivity : AppCompatActivity() {
         loadProfileImageIntoView(
             currentUser,
             profileImageView,
-            ProgressBarImageLoadListener(progressBarItem = progressBarItem)
+            ProgressBarImageLoadListener(progressBarItem)
         )
 
         profileImageView.setOnClickListener {
