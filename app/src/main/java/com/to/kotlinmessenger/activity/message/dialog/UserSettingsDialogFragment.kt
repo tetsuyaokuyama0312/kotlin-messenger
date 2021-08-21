@@ -11,8 +11,10 @@ import com.to.kotlinmessenger.util.loadProfileImageIntoView
 
 /**
  * ユーザー設定ダイアログ。
+ *
+ * このクラスのインスタンスは、[UserSettingsDialogFragment.newInstance]を呼び出すことで作成できる。
  */
-class UserSettingsDialogFragment : DialogFragment() {
+class UserSettingsDialogFragment private constructor() : DialogFragment() {
 
     companion object {
         /** 現在ログイン中のユーザーを渡す際のキー */
@@ -20,6 +22,26 @@ class UserSettingsDialogFragment : DialogFragment() {
 
         /** ユーザー設定変更イベントのリスナーを渡す際のキー */
         const val LISTENER_KEY = "LISTENER"
+
+        /**
+         * 指定された引数を使用して、`UserSettingsDialogFragment`を作成する。
+         *
+         * @param currentUser 現在ログイン中のユーザー
+         * @param listener ユーザー設定変更イベントのコールバックリスナ
+         * @return `UserSettingsDialogFragment`
+         */
+        fun newInstance(
+            currentUser: User,
+            listener: UserSettingsChangeListener? = null
+        ): UserSettingsDialogFragment {
+            return UserSettingsDialogFragment()
+                .apply {
+                    arguments = Bundle().apply {
+                        putParcelable(CURRENT_USER_KEY, currentUser)
+                        putParcelable(LISTENER_KEY, listener)
+                    }
+                }
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -41,13 +63,10 @@ class UserSettingsDialogFragment : DialogFragment() {
         // 変更ボタン
         binding.changeButtonUserSettings.setOnClickListener {
             // ユーザー設定変更ダイアログを起動
-            val dialog = UserSettingsChangeDialogFragment()
-            dialog.apply {
-                arguments = Bundle().apply {
-                    putParcelable(CURRENT_USER_KEY, currentUser)
-                    putParcelable(LISTENER_KEY, listener)
-                }
-            }.show(childFragmentManager, dialog::class.simpleName)
+            val dialog = UserSettingsChangeDialogFragment.newInstance(
+                currentUser, listener
+            )
+            dialog.show(childFragmentManager, dialog::class.simpleName)
         }
         // ログアウトボタン
         binding.logoutButtonUserSettings.setOnClickListener {

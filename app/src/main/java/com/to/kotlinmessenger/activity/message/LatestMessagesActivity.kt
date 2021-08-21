@@ -17,8 +17,6 @@ import com.to.kotlinmessenger.R
 import com.to.kotlinmessenger.activity.account.RegisterActivity
 import com.to.kotlinmessenger.activity.message.dialog.UserSettingsChangeListener
 import com.to.kotlinmessenger.activity.message.dialog.UserSettingsDialogFragment
-import com.to.kotlinmessenger.activity.message.dialog.UserSettingsDialogFragment.Companion.CURRENT_USER_KEY
-import com.to.kotlinmessenger.activity.message.dialog.UserSettingsDialogFragment.Companion.LISTENER_KEY
 import com.to.kotlinmessenger.model.ChatMessage
 import com.to.kotlinmessenger.model.User
 import com.to.kotlinmessenger.util.*
@@ -244,13 +242,10 @@ class LatestMessagesActivity : AppCompatActivity() {
 
         profileImageView.setOnClickListener {
             // ユーザー設定ダイアログを起動
-            val dialog = UserSettingsDialogFragment()
-            dialog.apply {
-                arguments = Bundle().apply {
-                    putParcelable(CURRENT_USER_KEY, currentUser)
-                    putParcelable(LISTENER_KEY, createUserSettingsChangeListener(progressBarItem))
-                }
-            }.show(supportFragmentManager, dialog::class.simpleName)
+            val dialog = UserSettingsDialogFragment.newInstance(
+                currentUser, createUserSettingsChangeListener(progressBarItem)
+            )
+            dialog.show(supportFragmentManager, dialog::class.simpleName)
         }
     }
 

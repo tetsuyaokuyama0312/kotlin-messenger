@@ -15,12 +15,34 @@ import java.util.*
 
 /**
  * ユーザー設定変更ダイアログ。
+ *
+ * このクラスのインスタンスは、[UserSettingsChangeDialogFragment.newInstance]を呼び出すことで作成できる。
  */
-class UserSettingsChangeDialogFragment : DialogFragment() {
+class UserSettingsChangeDialogFragment private constructor() : DialogFragment() {
 
     companion object {
         /** 画像選択のリクエストコード */
         private const val REQUEST_CODE_SELECT_PHOTO = 0
+
+        /**
+         * 指定された引数を使用して、`UserSettingsChangeDialogFragment`を作成する。
+         *
+         * @param currentUser 現在ログイン中のユーザー
+         * @param listener ユーザー設定変更イベントのコールバックリスナ
+         * @return `UserSettingsChangeDialogFragment`
+         */
+        fun newInstance(
+            currentUser: User,
+            listener: UserSettingsChangeListener? = null
+        ): UserSettingsChangeDialogFragment {
+            return UserSettingsChangeDialogFragment()
+                .apply {
+                    arguments = Bundle().apply {
+                        putParcelable(UserSettingsDialogFragment.CURRENT_USER_KEY, currentUser)
+                        putParcelable(UserSettingsDialogFragment.LISTENER_KEY, listener)
+                    }
+                }
+        }
     }
 
     /** 現在ログイン中のユーザー */
